@@ -16,7 +16,8 @@ class Input extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      report: ''
+      report: '',
+      isPlace: false
     };
   }
 
@@ -25,7 +26,6 @@ class Input extends PureComponent {
       <TextInput
         placeholder="Input command"
         placeholderTextColor="white"
-        autoCapitalize="characters"
         clearTextOnFocus
         style={{
           width: '80%',
@@ -44,9 +44,13 @@ class Input extends PureComponent {
 
   onSubmit() {
     const { x, y, right, left, bottom, top, facing } = this.props.data;
-    const { report } = this.state;
+    const { report, isPlace } = this.state;
     const { setFace, setPosition, setReport } = this.props;
     if (report === 'MOVE') {
+      if (!isPlace) {
+        setReport({ output: 'Invalid command' });
+        return;
+      }
       setReport({ output: 'Robot move' });
       if (right && y + 1 <= 4) setPosition({ y: y + 1 });
       if (left && y - 1 >= 0) setPosition({ y: y - 1 });
@@ -63,6 +67,10 @@ class Input extends PureComponent {
         });
       }
     } else if (report === 'LEFT') {
+      if (!isPlace) {
+        setReport({ output: 'Invalid command' });
+        return;
+      }
       setReport({ output: 'Robot turn left' });
       if (right)
         setFace({
@@ -105,6 +113,10 @@ class Input extends PureComponent {
           facing: 'WEST'
         });
     } else if (report === 'RIGHT') {
+      if (!isPlace) {
+        setReport({ output: 'Invalid command' });
+        return;
+      }
       setReport({ output: 'Robot turn right' });
       if (right)
         setFace({
@@ -147,6 +159,10 @@ class Input extends PureComponent {
           facing: 'EAST'
         });
     } else if (report === 'REPORT') {
+      if (!isPlace) {
+        setReport({ output: 'Invalid command' });
+        return;
+      }
       setReport({
         output: 'Postion x: ' + x + ' y: ' + y + ' facing: ' + facing
       });
@@ -194,6 +210,7 @@ class Input extends PureComponent {
             top: false,
             facing: 'WEST'
           });
+        this.setState({ isPlace: true });
         setPosition({ x: parseInt(_x), y: parseInt(_y) });
         setReport({
           output:

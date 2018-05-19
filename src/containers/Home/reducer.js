@@ -1,6 +1,6 @@
 const initialState = {
-  x: 0,
-  y: 0,
+  x: null,
+  y: null,
   output: '',
   left: false,
   right: false,
